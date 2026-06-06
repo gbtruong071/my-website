@@ -1,82 +1,130 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <title>Smart Grammar Explainer</title>
+<meta charset="UTF-8">
+<title>Smart Grammar Explainer</title>
 
-    <style>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 0;
+}
 
-        body{
-            font-family:Arial;
-            max-width:800px;
-            margin:auto;
-            padding:20px;
-        }
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
 
-        textarea{
-            width:100%;
-            height:200px;
-        }
+/* Title */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        select,input{
-            width:100%;
-            padding:10px;
-            margin-top:10px;
-        }
+/* Inputs */
+label {
+    font-weight: bold;
+    margin-top: 12px;
+    display: block;
+}
 
-        button{
-            margin-top:15px;
-            padding:10px 20px;
-        }
+textarea, select, input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
 
-        #result{
-            margin-top:20px;
-            border:1px solid #ddd;
-            padding:15px;
-        }
+textarea {
+    height: 160px;
+    resize: none;
+}
 
-    </style>
+/* Button */
+button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
+button:hover {
+    background: #3730a3;
+}
+
+/* Result */
+#result {
+    margin-top: 25px;
+}
+
+/* Cards */
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Corrected text highlight */
+.correct {
+    font-size: 18px;
+    font-weight: bold;
+    color: #16a34a;
+}
+
+/* Loader */
+.loader {
+    text-align: center;
+    padding: 10px;
+    color: #666;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Smart Grammar Explainer</h1>
+<div class="container">
+
+<h1>🧠 Smart Grammar Explainer</h1>
 
 <label>Text to Analyze</label>
-
-<textarea id="text"></textarea>
+<textarea id="text" placeholder="Write your sentence here..."></textarea>
 
 <label>Language</label>
-
 <select id="lang">
     <option>English</option>
     <option>French</option>
 </select>
 
 <label>Tone</label>
-
 <select id="tone">
     <option>Academic</option>
     <option>Casual</option>
 </select>
 
 <label>Email</label>
+<input type="email" id="email" placeholder="example@gmail.com">
 
-<input
-    type="email"
-    id="email"
-    placeholder="example@gmail.com"
->
+<button onclick="analyzeText()">Analyze Text</button>
 
-<button onclick="analyzeText()">
-    Analyze Text
-</button>
-
-<div id="result">
-
-    Result will appear here...
+<div id="result">Result will appear here...</div>
 
 </div>
 
@@ -84,51 +132,50 @@
 
 async function analyzeText(){
 
-    const text =
-        document.getElementById("text").value;
+    const result = document.getElementById("result");
 
-    const lang =
-        document.getElementById("lang").value;
+    result.innerHTML = `<div class="loader">Analyzing...</div>`;
 
-    const tone =
-        document.getElementById("tone").value;
+    const text = document.getElementById("text").value;
+    const lang = document.getElementById("lang").value;
+    const tone = document.getElementById("tone").value;
+    const email = document.getElementById("email").value;
 
-    const email =
-        document.getElementById("email").value;
+    try {
+        const response = await fetch(
+            "https://giabao071.app.n8n.cloud/webhook-test/grammar-check",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, lang, tone, email })
+            }
+        );
 
-    const response = await fetch(
-        "https://giabao071.app.n8n.cloud/webhook-test/grammar-check",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                text:text,
-                lang:lang,
-                tone:tone,
-                email:email
-            })
-        }
-    );
+        const data = await response.json();
 
-const data = await response.json();
+        result.innerHTML = `
+            <div class="card">
+                <h3>✨ Corrected Text</h3>
+                <div class="correct">${data.correctedText}</div>
+            </div>
 
-const result = document.getElementById("result");
+            <div class="card">
+                <h3>⚠️ Errors</h3>
+                ${data.errors.map(e => `
+                    <div class="card">
+                        <b>Original:</b> ${e.original}<br>
+                        <b>Correction:</b> ${e.correction}<br><br>
+                        <b>Explanation:</b><br>
+                        ${e.explanation}
+                    </div>
+                `).join("")}
+            </div>
+        `;
 
-result.innerHTML = `
-  <h3>Corrected Text</h3>
-  <p>${data.correctedText}</p>
-
-  <h3>Errors</h3>
-  ${data.errors.map(e => `
-    <div style="padding:10px; border:1px solid #ddd; margin-bottom:10px;">
-      <b>Original:</b> ${e.original} <br>
-      <b>Correction:</b> ${e.correction} <br>
-      <b>Explanation:</b> ${e.explanation}
-    </div>
-  `).join("")}
-`;
+    } catch (err) {
+        result.innerHTML = `<div class="card">❌ Error: ${err.message}</div>`;
+    }
+}
 
 </script>
 
