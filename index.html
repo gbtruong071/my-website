@@ -112,13 +112,23 @@ async function analyzeText(){
         }
     );
 
-   const data = await response.json();
+const data = await response.json();
 
-console.log(data);
+const result = document.getElementById("result");
 
-document.getElementById("result").innerHTML =
-    JSON.stringify(data, null, 2);
-}
+result.innerHTML = `
+  <h3>Corrected Text</h3>
+  <p>${data.correctedText}</p>
+
+  <h3>Errors</h3>
+  ${data.errors.map(e => `
+    <div style="padding:10px; border:1px solid #ddd; margin-bottom:10px;">
+      <b>Original:</b> ${e.original} <br>
+      <b>Correction:</b> ${e.correction} <br>
+      <b>Explanation:</b> ${e.explanation}
+    </div>
+  `).join("")}
+`;
 
 </script>
 
