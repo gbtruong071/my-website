@@ -1,23 +1,31 @@
 <h1>Smart Grammar Explainer</h1>
 
-<textarea id="text"></textarea>
+<textarea id="text" placeholder="Enter your text here..."></textarea>
+
+<br><br>
 
 <select id="lang">
-    <option>English</option>
-    <option>French</option>
+    <option value="English">English</option>
+    <option value="French">French</option>
 </select>
 
 <select id="tone">
-    <option>Academic</option>
-    <option>Casual</option>
+    <option value="Academic">Academic</option>
+    <option value="Casual">Casual</option>
 </select>
 
-<input type="email" placeholder="Your Email">
+<input id="email" type="email" placeholder="Your Email">
 
-<button>Analyze Text</button>
+<button onclick="analyzeText()">Analyze Text</button>
 
 <h2>Corrected Text</h2>
 <div id="corrected"></div>
 
 <h2>Error Breakdown</h2>
 <div id="errors"></div>
+
+<script>
+function analyzeText() {
+    alert("Ready to connect to n8n!");
+}
+</script>
