@@ -1,10 +1,23 @@
+<h1>Smart Grammar Explainer</h1>
+
 <textarea id="text"></textarea>
 
 <select id="lang">
-  <option>English</option>
-  <option>French</option>
+    <option>English</option>
+    <option>French</option>
 </select>
 
-<button onclick="checkGrammar()">
-  Check Grammar
-</button>
+<select id="tone">
+    <option>Academic</option>
+    <option>Casual</option>
+</select>
+
+<input type="email" placeholder="Your Email">
+
+<button>Analyze Text</button>
+
+<h2>Corrected Text</h2>
+<div id="corrected"></div>
+
+<h2>Error Breakdown</h2>
+<div id="errors"></div>
