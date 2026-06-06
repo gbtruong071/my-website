@@ -1,31 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Grammar Explainer</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            max-width:800px;
+            margin:auto;
+            padding:20px;
+        }
+
+        textarea{
+            width:100%;
+            height:200px;
+        }
+
+        select,input{
+            width:100%;
+            padding:10px;
+            margin-top:10px;
+        }
+
+        button{
+            margin-top:15px;
+            padding:10px 20px;
+        }
+
+        #result{
+            margin-top:20px;
+            border:1px solid #ddd;
+            padding:15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
 <h1>Smart Grammar Explainer</h1>
 
-<textarea id="text" placeholder="Enter your text here..."></textarea>
+<label>Text to Analyze</label>
 
-<br><br>
+<textarea id="text"></textarea>
+
+<label>Language</label>
 
 <select id="lang">
-    <option value="English">English</option>
-    <option value="French">French</option>
+    <option>English</option>
+    <option>French</option>
 </select>
+
+<label>Tone</label>
 
 <select id="tone">
-    <option value="Academic">Academic</option>
-    <option value="Casual">Casual</option>
+    <option>Academic</option>
+    <option>Casual</option>
 </select>
 
-<input id="email" type="email" placeholder="Your Email">
+<label>Email</label>
 
-<button onclick="analyzeText()">Analyze Text</button>
+<input
+    type="email"
+    id="email"
+    placeholder="example@gmail.com"
+>
 
-<h2>Corrected Text</h2>
-<div id="corrected"></div>
+<button onclick="analyzeText()">
+    Analyze Text
+</button>
 
-<h2>Error Breakdown</h2>
-<div id="errors"></div>
+<div id="result">
+
+    Result will appear here...
+
+</div>
 
 <script>
-function analyzeText() {
-    alert("Ready to connect to n8n!");
+
+function analyzeText(){
+
+    const text =
+        document.getElementById("text").value;
+
+    const lang =
+        document.getElementById("lang").value;
+
+    const tone =
+        document.getElementById("tone").value;
+
+    const email =
+        document.getElementById("email").value;
+
+    document.getElementById("result").innerHTML =
+        `
+        <h3>Input Received</h3>
+
+        <b>Language:</b> ${lang}<br>
+
+        <b>Tone:</b> ${tone}<br>
+
+        <b>Email:</b> ${email}<br><br>
+
+        <b>Text:</b><br>
+
+        ${text}
+        `;
 }
+
 </script>
+
+</body>
+</html>
